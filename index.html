@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>AstroVita</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Manrope:wght@400;600&display=swap">
+<style>
+:root{--bg:#0a1226;--bg2:#12204a;--card:rgba(255,255,255,.06);--line:rgba(255,255,255,.12);--tx:#e8eefc;--mu:#93a3c7;--ok:#5ce1e6;--wa:#ffb547;--bd:#ff6b81;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:light){:root:not([data-theme="dark"]){--bg:#eef3ff;--bg2:#d9e4ff;--card:rgba(255,255,255,.8);--line:rgba(10,18,38,.14);--tx:#0e1a3a;--mu:#4c5c82;--ok:#0a8f96;--wa:#b86e00;--bd:#c8243f}}
+:root[data-theme="light"]{--bg:#eef3ff;--bg2:#d9e4ff;--card:rgba(255,255,255,.8);--line:rgba(10,18,38,.14);--tx:#0e1a3a;--mu:#4c5c82;--ok:#0a8f96;--wa:#b86e00;--bd:#c8243f}
+:root[data-theme="dark"]{--bg:#0a1226;--bg2:#12204a;--card:rgba(255,255,255,.06);--line:rgba(255,255,255,.12);--tx:#e8eefc;--mu:#93a3c7;--ok:#5ce1e6;--wa:#ffb547;--bd:#ff6b81}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{font:400 16px/1.55 Manrope,system-ui,sans-serif;color:var(--tx);background:linear-gradient(160deg,var(--bg),var(--bg2));background-attachment:fixed;min-height:100vh}
+#stars{position:fixed;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.wrap{position:relative;z-index:1;max-width:1100px;margin:0 auto;padding:16px}
+header{display:flex;flex-wrap:wrap;gap:12px;align-items:center;justify-content:space-between}
+h1,h2{font-family:Unbounded,Manrope,sans-serif;margin:0;font-weight:700}
+h1{font-size:1.5rem}h2{font-size:1.05rem;margin-bottom:10px}
+.tools{display:flex;gap:8px;flex-wrap:wrap}
+button,select{font:inherit;color:var(--tx);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 12px;cursor:pointer}
+button:hover{border-color:var(--ok)}
+:focus-visible{outline:2px solid var(--ok);outline-offset:2px}
+nav{display:flex;gap:6px;overflow-x:auto;margin:16px 0;padding-bottom:4px}
+nav button{white-space:nowrap}
+nav button.on{background:var(--ok);color:#06101f;border-color:var(--ok);font-weight:600}
+.pg{display:none}.pg.on{display:block}
+.hero{border:1px solid var(--line);border-radius:18px;background:var(--card);padding:16px;display:grid;grid-template-columns:1fr auto;gap:8px 16px;align-items:end}
+.hero .big{font:700 clamp(2.6rem,9vw,4.6rem)/1 Unbounded,sans-serif;color:var(--ok)}
+.hero canvas{grid-column:1/-1;width:100%;height:110px}
+.grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:12px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:14px}
+.card.wide{grid-column:1/-1}
+.v{display:flex;justify-content:space-between;align-items:baseline}
+.v b{font:700 1.7rem Unbounded,sans-serif}
+.v small{color:var(--mu)}
+.card canvas{width:100%;height:46px;display:block;margin-top:6px}
+.st-ok{color:var(--ok)}.st-warn{color:var(--wa)}.st-bad{color:var(--bd)}
+.bar{height:12px;border-radius:8px;background:var(--line);overflow:hidden;margin:8px 0}
+.bar i{display:block;height:100%;width:0;background:var(--ok);transition:width .6s}
+ul.al{list-style:none;margin:0;padding:0;max-height:170px;overflow:auto}
+ul.al li{padding:6px 0;border-bottom:1px solid var(--line)}
+.note{color:var(--mu);font-size:.85rem}
+svg.body{width:100%;max-width:260px;display:block;margin:auto}
+svg.body .z{fill:var(--line);stroke:var(--mu);stroke-width:1.5;cursor:pointer;transition:fill .2s}
+svg.body .z:hover,svg.body .z.on{fill:var(--ok)}
+.two{display:grid;gap:16px;grid-template-columns:260px 1fr;align-items:center}
+.moods{display:flex;gap:8px;flex-wrap:wrap}
+.moods button{font-size:1.6rem}
+.breath{width:140px;height:140px;border-radius:50%;margin:12px auto;display:grid;place-items:center;background:radial-gradient(circle,var(--ok),transparent 70%);animation:br 8s ease-in-out infinite}
+@keyframes br{0%,100%{transform:scale(.6)}50%{transform:scale(1.1)}}
+.rx{height:150px;border-radius:14px;display:grid;place-items:center;font:700 1.2rem Unbounded,sans-serif;cursor:pointer;background:var(--bd);color:#fff;user-select:none}
+.rx.go{background:var(--ok);color:#06101f}.rx.wt{background:var(--wa);color:#06101f}
+.mem{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;max-width:360px}
+.mem button{aspect-ratio:1;font-size:1.8rem;padding:0;transition:transform .3s}
+.mem button.f{background:var(--ok);transform:rotateY(180deg)}
+.tl{display:flex;justify-content:space-between;font-size:.8rem;color:var(--mu)}
+@media(max-width:640px){.two{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+@media print{#stars,nav,.tools,#pg-games{display:none!important}.pg{display:block!important}body{background:#fff;color:#000}}
+</style>
+</head>
+<body>
+<canvas id="stars" aria-hidden="true"></canvas>
+<div class="wrap">
+<header>
+ <div><h1>AstroVita</h1><div class="note" data-i="sub"></div></div>
+ <div class="tools">
+  <select id="crew" aria-label="Crew"></select>
+  <button id="lg">EN</button><button id="th">◐</button><button id="pr" data-i="pdf"></button>
+ </div>
+</header>
+<nav id="nav"></nav>
+
+<section class="pg on" id="pg-dash">
+ <div class="hero"><div><div class="note" data-i="hr"></div><div class="big" id="hrBig">--</div></div><div class="st-ok" id="hrSt"></div><canvas id="ecg"></canvas></div>
+ <div class="grid" id="vit"></div>
+ <div class="grid">
+  <div class="card"><h2 data-i="al"></h2><ul class="al" id="al"></ul></div>
+  <div class="card"><h2 data-i="rad"></h2><div class="v"><b id="radV">0</b><small>mSv</small></div><div class="bar"><i id="radB"></i></div><div class="note" data-i="radN"></div></div>
+  <div class="card"><h2 data-i="slp"></h2><canvas id="slp" height="90"></canvas></div>
+  <div class="card wide"><h2 data-i="bone"></h2><canvas id="bone" height="150" style="width:100%"></canvas><div class="note" data-i="boneN"></div></div>
+ </div>
+</section>
+
+<section class="pg" id="pg-body"><div class="card two">
+ <svg class="body" viewBox="0 0 200 400" role="img" aria-label="Body">
+  <circle class="z" data-z="brain" cx="100" cy="42" r="30"/>
+  <path class="z" data-z="lung" d="M64 100h72v62H64z"/>
+  <circle class="z" data-z="heart" cx="108" cy="140" r="14" style="fill:var(--bd)"/>
+  <path class="z" data-z="muscle" d="M64 165h72v62H64zM40 100l24 8v90l-18 4zM160 100l-24 8v90l18 4z"/>
+  <path class="z" data-z="bone" d="M72 232h22v140H72zM106 232h22v140h-22z"/>
+ </svg>
+ <div><h2 id="zT"></h2><p id="zD"></p></div>
+</div></section>
+
+<section class="pg" id="pg-mis"><div class="grid">
+ <div class="card wide"><h2 data-i="mis"></h2><div class="bar"><i id="misB"></i></div><div class="tl"><span data-i="launch"></span><span id="misD"></span><span data-i="ret"></span></div></div>
+ <div class="card"><h2 data-i="ex"></h2><div class="v"><b id="exV">0</b><small>/ 120 min</small></div><div class="bar"><i id="exB"></i></div><button id="exA">+15 min</button></div>
+ <div class="card"><h2 data-i="wat"></h2><div class="v"><b id="wV">0</b><small>/ 2500 ml</small></div><div class="bar"><i id="wB"></i></div><button id="wA">+250 ml</button></div>
+ <div class="card"><h2 data-i="kc"></h2><div class="v"><b id="kV">0</b><small>/ 3000 kcal</small></div><div class="bar"><i id="kB"></i></div><button id="kA">+500 kcal</button></div>
+</div></section>
+
+<section class="pg" id="pg-mind"><div class="grid">
+ <div class="card"><h2 data-i="mood"></h2><div class="moods" id="moods"></div><p id="moodR" class="note"></p></div>
+ <div class="card"><h2 data-i="brt"></h2><div class="breath"><span id="brT"></span></div></div>
+</div></section>
+
+<section class="pg" id="pg-games"><div class="grid">
+ <div class="card"><h2 data-i="g1"></h2><div class="rx" id="rx"></div><p class="note" id="rxR"></p></div>
+ <div class="card"><h2 data-i="g2"></h2><div class="mem" id="mem"></div><p class="note" id="memR"></p></div>
+</div></section>
+<p class="note" data-i="sim"></p>
+</div>
+
+<script>
+const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+let lang='ru',cur=0;
+const T={ru:{sub:'Мониторинг здоровья астронавтов в космической миссии',pdf:'Отчёт PDF',n0:'Панель',n1:'Тело',n2:'Миссия',n3:'Разум',n4:'Игры',hr:'Пульс',spo:'Кислород SpO₂',bp:'Давление',tmp:'Температура',rsp:'Дыхание',co2:'CO₂ в модуле',al:'Оповещения',okm:'Все показатели в норме',warn:'Внимание',bad:'Тревога',rad:'Радиация',radN:'Накопленная доза за миссию. Лимит условный.',slp:'Сон за неделю, часы',bone:'Кости и мышцы в невесомости, % от нормы',boneN:'Иллюстративная модель: плотность костей и мышечная масса по месяцам миссии.',mis:'Ход миссии',launch:'Старт',ret:'Возвращение',day:'День',of:'из',ex:'Тренировка сегодня',wat:'Вода',kc:'Питание',mood:'Как вы себя чувствуете?',moodR:'Записей за неделю:',brt:'Дыхание 4–4',inh:'Вдох',exh:'Выдох',g1:'Тест на реакцию',g2:'Найди пару',wait:'Ждите зелёный…',click:'Жмите!',start:'Нажмите, чтобы начать',early:'Слишком рано. Ещё раз?',best:'Лучшее:',moves:'Ходов:',done:'Готово! Ходов:',sim:'Все данные на сайте — симуляция для демонстрации.',zbrain:['Мозг','В невесомости смещается жидкость, давление в голове растёт. Следим за сном, вниманием и настроением.'],zlung:['Лёгкие','Дыхание и CO₂ в модуле: рост CO₂ вызывает головную боль и сонливость.'],zheart:['Сердце','Без гравитации сердцу легче качать кровь, но со временем оно слабеет. Нужна кардионагрузка.'],zmuscle:['Мышцы','Без нагрузки мышцы теряют массу. Отсюда 2 часа тренировок в день.'],zbone:['Кости','Около 1% плотности костей в месяц. Помогают силовые тренировки и питание.'],m:['Отлично','Хорошо','Нормально','Устал','Тяжело']},
+en:{sub:'Astronaut health monitoring during a space mission',pdf:'PDF report',n0:'Dashboard',n1:'Body',n2:'Mission',n3:'Mind',n4:'Games',hr:'Heart rate',spo:'Blood oxygen SpO₂',bp:'Blood pressure',tmp:'Temperature',rsp:'Respiration',co2:'Module CO₂',al:'Alerts',okm:'All vitals are normal',warn:'Warning',bad:'Alarm',rad:'Radiation',radN:'Dose accumulated during the mission. Limit is illustrative.',slp:'Sleep this week, hours',bone:'Bones and muscles in microgravity, % of baseline',boneN:'Illustrative model: bone density and muscle mass by mission month.',mis:'Mission progress',launch:'Launch',ret:'Return',day:'Day',of:'of',ex:'Exercise today',wat:'Water',kc:'Nutrition',mood:'How do you feel?',moodR:'Check-ins this week:',brt:'4–4 breathing',inh:'Inhale',exh:'Exhale',g1:'Reaction test',g2:'Find the pair',wait:'Wait for green…',click:'Click!',start:'Click to start',early:'Too early. Try again?',best:'Best:',moves:'Moves:',done:'Done! Moves:',sim:'All data on this site is simulated for demonstration.',zbrain:['Brain','In microgravity fluids shift upward and head pressure rises. We track sleep, attention and mood.'],zlung:['Lungs','Breathing and module CO₂: higher CO₂ causes headaches and drowsiness.'],zheart:['Heart','Without gravity the heart pumps more easily but weakens over time. Cardio is needed.'],zmuscle:['Muscles','Without load muscles lose mass, hence 2 hours of exercise a day.'],zbone:['Bones','About 1% bone density lost per month. Strength training and diet help.'],m:['Great','Good','Okay','Tired','Rough']}};
+const t=k=>T[lang][k];
+const crew=[{n:{ru:'Айдар С., командир',en:'Aidar S., commander'},f:0,d:87},{n:{ru:'Лена К., бортинженер',en:'Lena K., flight engineer'},f:.04,d:87},{n:{ru:'Марк Т., врач',en:'Mark T., physician'},f:-.03,d:87}];
+const V=[{k:'hr',b:64,u:'bpm',n:3,w:[52,90],a:[45,105],dec:0},{k:'spo',b:98,u:'%',n:.8,w:[95,100],a:[92,101],dec:0},{k:'bp',b:118,u:'mmHg',n:4,w:[100,135],a:[90,150],dec:0},{k:'tmp',b:36.7,u:'°C',n:.15,w:[36.1,37.3],a:[35.5,38],dec:1},{k:'rsp',b:15,u:'/min',n:1.2,w:[12,20],a:[9,26],dec:0},{k:'co2',b:.45,u:'kPa',n:.04,w:[0,.6],a:[0,.9],dec:2}];
+V.forEach(v=>{v.h=[];v.s='ok'});
+const css=n=>getComputedStyle(document.documentElement).getPropertyValue(n).trim();
+function status(v,x){return x<v.a[0]||x>v.a[1]?'bad':x<v.w[0]||x>v.w[1]?'warn':'ok'}
+
+/* i18n */
+function i18n(){
+ document.documentElement.lang=lang;
+ $$('[data-i]').forEach(e=>e.textContent=t(e.dataset.i));
+ $('#lg').textContent=lang==='ru'?'EN':'RU';
+ $('#nav').innerHTML='';[0,1,2,3,4].forEach(i=>{const b=document.createElement('button');b.textContent=t('n'+i);b.onclick=()=>show(i);b.dataset.i=i;$('#nav').append(b)});
+ show(curPg);
+ $('#crew').innerHTML=crew.map((c,i)=>`<option value="${i}">${c.n[lang]}</option>`).join('');$('#crew').value=cur;
+ $('#vit').innerHTML=V.map(v=>`<div class="card"><div class="note">${t(v.k)}</div><div class="v"><b id="v_${v.k}">--</b><small>${v.u}</small></div><canvas id="c_${v.k}" width="260" height="46"></canvas></div>`).join('');
+ $('#moods').innerHTML=['😄','🙂','😐','😴','😣'].map((e,i)=>`<button title="${t('m')[i]}" aria-label="${t('m')[i]}">${e}</button>`).join('');
+ $$('#moods button').forEach(b=>b.onclick=()=>{moodN++;moodR()});moodR();
+ zone(curZ);missionUI();rxReset();memInit();
+}
+let curPg=0,moodN=0,curZ='heart';
+function show(i){curPg=i;['dash','body','mis','mind','games'].forEach((p,j)=>$('#pg-'+p).classList.toggle('on',j===i));$$('#nav button').forEach((b,j)=>b.classList.toggle('on',j===i));if(i===0)drawStatic()}
+function moodR(){$('#moodR').textContent=t('moodR')+' '+moodN}
+
+/* vitals */
+const al=[];
+function tick(){
+ const c=crew[cur];
+ V.forEach(v=>{
+  let x=v.b*(1+(v.k==='hr'||v.k==='bp'?c.f:0))+(Math.random()-.5)*2*v.n;
+  if(Math.random()<.012)x+=(Math.random()<.5?-1:1)*v.n*(v.k==='co2'?9:5);
+  v.val=x;v.h.push(x);if(v.h.length>40)v.h.shift();
+  const s=status(v,x);
+  if(s!=='ok'&&s!==v.s){al.unshift(`<span class="st-${s}">${t(s)}</span> ${t(v.k)}: ${x.toFixed(v.dec)} ${v.u} (${new Date().toLocaleTimeString().slice(0,5)})`);if(al.length>6)al.pop()}
+  v.s=s;
+  const el=$('#v_'+v.k);if(el){el.textContent=x.toFixed(v.dec);el.className='st-'+s;spark(v)}
+ });
+ const h=V[0];$('#hrBig').textContent=h.val.toFixed(0);$('#hrBig').style.color=css('--'+{ok:'ok',warn:'wa',bad:'bd'}[h.s]);
+ $('#hrSt').textContent=t(h.s==='ok'?'okm':h.s);$('#hrSt').className='st-'+h.s;
+ $('#al').innerHTML=al.length?al.map(a=>'<li>'+a+'</li>').join(''):'<li class="st-ok">'+t('okm')+'</li>';
+ $('#radV').textContent=(c.d*.62).toFixed(0);$('#radB').style.width=Math.min(100,c.d*.62/600*100)+'%';
+}
+function spark(v){
+ const cv=$('#c_'+v.k);if(!cv)return;const x=cv.getContext('2d');x.clearRect(0,0,cv.width,cv.height);
+ const lo=Math.min(...v.h),hi=Math.max(...v.h),r=hi-lo||1;
+ x.strokeStyle=css('--'+{ok:'ok',warn:'wa',bad:'bd'}[v.s]);x.lineWidth=2;x.beginPath();
+ v.h.forEach((p,i)=>{const px=i/39*cv.width,py=cv.height-4-(p-lo)/r*(cv.height-8);i?x.lineTo(px,py):x.moveTo(px,py)});x.stroke();
+}
+
+/* ECG hero */
+const ecg=$('#ecg'),ex=ecg.getContext('2d');let ph=0,buf=[];
+function ecgY(p){p%=1;const g=(c,w,a)=>a*Math.exp(-((p-c)**2)/(w*w));return g(.18,.04,.12)-g(.36,.012,.15)+g(.4,.014,1)-g(.44,.014,.25)+g(.66,.07,.2)}
+function ecgLoop(){
+ ecg.width=ecg.clientWidth;ecg.height=110;
+ const bpm=V[0].val||64;ph+=bpm/60/60;buf.push(ecgY(ph));if(buf.length>ecg.width/2)buf.shift();
+ ex.strokeStyle=css('--ok');ex.lineWidth=2;ex.shadowColor=css('--ok');ex.shadowBlur=8;ex.beginPath();
+ buf.forEach((y,i)=>{const px=i*2,py=95-y*80;i?ex.lineTo(px,py):ex.moveTo(px,py)});ex.stroke();
+ requestAnimationFrame(ecgLoop);
+}
+
+/* static charts */
+function drawStatic(){
+ const s=$('#slp');if(s){s.width=s.clientWidth||300;const x=s.getContext('2d');x.clearRect(0,0,s.width,s.height);
+  [6.2,5.8,7,6.5,5.2,6.8,7.1].forEach((h,i)=>{const bw=s.width/7-8,bh=h/9*70;x.fillStyle=css(h<6?'--wa':'--ok');x.fillRect(i*(bw+8)+4,80-bh,bw,bh);x.fillStyle=css('--mu');x.font='11px Manrope';x.fillText(h,i*(bw+8)+4,90)})}
+ const b=$('#bone');if(b){b.width=b.clientWidth||600;const x=b.getContext('2d'),H=b.height,W=b.width;x.clearRect(0,0,W,H);
+  [[[100,99,98,97,96.2,95.5,94.8],'--ok'],[[100,98,96,94.5,93,92,91],'--wa']].forEach(([d,c])=>{x.strokeStyle=css(c);x.lineWidth=3;x.beginPath();d.forEach((p,i)=>{const px=20+i*(W-40)/6,py=H-20-(p-88)/12*(H-40);i?x.lineTo(px,py):x.moveTo(px,py)});x.stroke()});
+  x.fillStyle=css('--mu');x.font='12px Manrope';for(let i=0;i<7;i++)x.fillText((lang==='ru'?'М':'M')+i,14+i*(W-40)/6,H-4);
+  x.fillStyle=css('--ok');x.fillText(lang==='ru'?'кости':'bones',W-80,16);x.fillStyle=css('--wa');x.fillText(lang==='ru'?'мышцы':'muscles',W-80,32)}
+}
+
+/* body */
+function zone(z){curZ=z;$$('.z').forEach(e=>e.classList.toggle('on',e.dataset.z===z));const d=t('z'+z);$('#zT').textContent=d[0];$('#zD').textContent=d[1]}
+$$('.z').forEach(e=>e.onclick=()=>zone(e.dataset.z));
+
+/* mission */
+const M={ex:[0,120,15],w:[0,2500,250],k:[0,3000,500]};
+function missionUI(){const d=crew[cur].d;$('#misB').style.width=d/180*100+'%';$('#misD').textContent=`${t('day')} ${d} ${t('of')} 180`;
+ [['ex','ex'],['w','w'],['k','k']].forEach(([m,id])=>{const q=M[m];$('#'+id+'V').textContent=q[0];$('#'+id+'B').style.width=Math.min(100,q[0]/q[1]*100)+'%'})}
+[['exA','ex'],['wA','w'],['kA','k']].forEach(([b,m])=>$('#'+b).onclick=()=>{M[m][0]=Math.min(M[m][1],M[m][0]+M[m][2]);missionUI()});
+
+/* breathing */
+let bi=0;setInterval(()=>{$('#brT').textContent=t(bi++%2?'exh':'inh')},4000);$('#brT').textContent=t('inh');
+
+/* reaction game */
+let rxS='idle',rxT,rxTO,rxBest=null;
+function rxReset(){rxS='idle';const e=$('#rx');e.className='rx';e.textContent=t('start');$('#rxR').textContent=rxBest?t('best')+' '+rxBest+' ms':''}
+$('#rx').onclick=()=>{const e=$('#rx');
+ if(rxS==='idle'){rxS='wait';e.className='rx wt';e.textContent=t('wait');rxTO=setTimeout(()=>{rxS='go';e.className='rx go';e.textContent=t('click');rxT=performance.now()},1200+Math.random()*2500)}
+ else if(rxS==='wait'){clearTimeout(rxTO);rxReset();e.textContent=t('early')}
+ else{const ms=Math.round(performance.now()-rxT);rxBest=rxBest?Math.min(rxBest,ms):ms;rxReset();e.textContent=ms+' ms'}};
+
+/* memory game */
+let mc=[],mo=[],mm=0,lock=false;
+function memInit(){const em=['🚀','🛰️','🌙','☄️','🪐','⭐','👨‍🚀','🌍'];mc=[...em,...em].sort(()=>Math.random()-.5);mo=[];mm=0;lock=false;
+ $('#mem').innerHTML=mc.map((e,i)=>`<button data-i="${i}" aria-label="card ${i+1}"></button>`).join('');
+ $$('#mem button').forEach(b=>b.onclick=()=>flip(b));$('#memR').textContent=t('moves')+' 0'}
+function flip(b){if(lock||b.classList.contains('f'))return;b.classList.add('f');b.textContent=mc[b.dataset.i];mo.push(b);
+ if(mo.length===2){mm++;$('#memR').textContent=t('moves')+' '+mm;const[a,c]=mo;
+  if(mc[a.dataset.i]===mc[c.dataset.i]){mo=[];if($$('#mem .f').length===16)$('#memR').textContent=t('done')+' '+mm}
+  else{lock=true;setTimeout(()=>{[a,c].forEach(x=>{x.classList.remove('f');x.textContent=''});mo=[];lock=false},800)}}}
+
+/* stars */
+const sc=$('#stars'),sx=sc.getContext('2d');let st=[];
+function stars(){sc.width=innerWidth;sc.height=innerHeight;st=Array.from({length:110},()=>({x:Math.random()*sc.width,y:Math.random()*sc.height,r:Math.random()*1.4+.3,z:Math.random()*.5+.1}))}
+function drawStars(){sx.clearRect(0,0,sc.width,sc.height);sx.fillStyle=css('--tx');st.forEach(s=>{s.y+=s.z*.15;if(s.y>sc.height)s.y=0;sx.globalAlpha=.25+s.z;sx.beginPath();sx.arc(s.x,s.y,s.r,0,6.3);sx.fill()});sx.globalAlpha=1;requestAnimationFrame(drawStars)}
+addEventListener('resize',()=>{stars();drawStatic()});
+
+/* controls */
+$('#lg').onclick=()=>{lang=lang==='ru'?'en':'ru';al.length=0;i18n();drawStatic()};
+$('#th').onclick=()=>{const r=document.documentElement,l=r.dataset.theme?r.dataset.theme==='light':matchMedia('(prefers-color-scheme: light)').matches;r.dataset.theme=l?'dark':'light';drawStatic()};
+$('#pr').onclick=()=>print();
+$('#crew').onchange=e=>{cur=+e.target.value;V.forEach(v=>{v.h=[];v.s='ok'});al.length=0;missionUI()};
+
+stars();i18n();tick();setInterval(tick,1000);ecgLoop();if(!matchMedia('(prefers-reduced-motion: reduce)').matches)drawStars();drawStatic();
+</script>
+</body>
+</html>
